@@ -1,0 +1,52 @@
+pipeline {
+  agent any
+  environment {
+    IMAGE = 'samikshav/simpletimeservice'
+    TAG = "${env.BUILD_NUMBER ?: 'local'}"
+    DOCKERHUB_CREDS = 'dockerhub-creds'
+    KUBECONFIG_SECRET = 'kubeconfig'
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build image') {
+      steps {
+        sh 'docker build -t ${IMAGE}:${TAG} app/'
+      }
+    }
+
+    stage('Push to Docker Hub') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+          sh '''
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            docker push ${IMAGE}:${TAG}
+          '''
+        }
+      }
+    }
+
+    stage('Deploy to Kubernetes') {
+      steps {
+        withCredentials([string(credentialsId: "${KUBECONFIG_SECRET}", variable: 'KUBECONFIG_CONTENT')]) {
+          sh '''
+            mkdir -p $HOME/.kube
+            echo "$KUBECONFIG_CONTENT" > $HOME/.kube/config
+            kubectl apply -f app/microservice.yml
+            # Update image in case manifest uses a fixed tag
+            kubectl set image deployment/simpletimeservice simpletimeservice=${IMAGE}:${TAG} --record || true
+          '''
+        }
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout || true'
+    }
+  }
+}
