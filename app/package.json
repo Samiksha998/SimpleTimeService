@@ -1,0 +1,12 @@
+{
+  "name": "samikshas-web-app",
+  "version": "1.0.0",
+  "description": "A simple welcome web app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": ["welcome", "webapp"],
+  "author": "Samiksha",
+  "license": "MIT"
+}
