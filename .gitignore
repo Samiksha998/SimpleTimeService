@@ -1,0 +1,9 @@
+# Ignore Terraform local state and provider cache
+Terraform/.terraform/
+.terraform/
+
+# Node modules
+node_modules/
+
+# Logs
+*.log

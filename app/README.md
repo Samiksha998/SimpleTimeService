@@ -1,5 +1,7 @@
 
-## Quick Start
+
+
+# Local Testing
 
 ### Local Testing
 ```bash
@@ -9,7 +11,7 @@ node app.js
 
 Visit `http://localhost:8080`
 
-### Docker
+# Docker
 ```bash
 # Build (tag matches Kubernetes manifest)
 docker build -t samikshav/simpletimeservice:v1 .
@@ -18,8 +20,14 @@ docker build -t samikshav/simpletimeservice:v1 .
 docker run -p 8080:8080 samikshav/simpletimeservice:v1
 ```
 
-### Kubernetes (microservice.yml)
-Apply the Kubernetes manifest included in this repo and expose the service.
+###Kubernetes (microservice.yml)
+
+
+#### Manifest Features
+- **Resource Limits**: CPU (requests: 100m, limits: 500m) and memory (requests: 128Mi, limits: 512Mi)
+- **Liveness Probe**: Restarts unhealthy containers (HTTP GET every 10s after 30s startup delay)
+- **Readiness Probe**: Removes pods from service if not ready (HTTP GET every 5s after 10s startup delay)
+- **Security Context**: Restricts container privileges and prevents privilege escalation
 
 ```bash
 # Apply the manifest
@@ -40,6 +48,9 @@ minikube service simpletimeservice --url
 
 # View logs
 kubectl logs deployment/simpletimeservice
+
+# Check resource usage
+kubectl top pod -l app=simpletimeservice
 
 # To remove
 kubectl delete -f microservice.yml
