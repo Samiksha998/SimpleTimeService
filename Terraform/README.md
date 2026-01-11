@@ -1,6 +1,6 @@
 # Terraform EKS Cluster (AWS)
 
-This repository contains Terraform code to provision a **production-ready Amazon EKS cluster** on AWS using **Terraform Registry modules**, with a **remote backend (S3 + DynamoDB)** for state management.
+This repository contains Terraform code to provision a **Amazon EKS cluster** on AWS using **Terraform Registry modules**, with a **remote backend (S3 + DynamoDB)** for state management.
 
 ---
 
@@ -36,7 +36,7 @@ The infrastructure includes:
 
 ##  Repository Structure
 
-terraform-eks-cluster/
+Terraform/
 │
 ├── README.md
 ├── .gitignore
@@ -45,7 +45,7 @@ terraform-eks-cluster/
 ├── providers.tf
 ├── versions.tf
 ├── variables.tf
-├── terraform.tfvars # ignored by git
+├── terraform.tfvars 
 │
 ├── vpc.tf
 ├── eks.tf
@@ -88,7 +88,7 @@ Terraform backend resources **must be created manually** before running Terrafor
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/terraform-eks-cluster.git
+git clone https://github.com/samiksha998/SimpleTimeService.git
 cd terraform-eks-cluster
 
 Commands:
